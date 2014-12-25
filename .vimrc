@@ -298,23 +298,63 @@ let g:Tlist_Use_Right_Window = 1
 
 "--------------------------------------------------------------------------
 " neobundle
-set nocompatible               " Be iMproved
-filetype off                   " Required!
 
-if has('vim_starting')
-  set runtimepath+=~/.vim/bundle/neobundle.vim/
-endif
+filetype off
+filetype plugin indent off
+" if has('vim_starting')
+"   set runtimepath+=~/.vim/bundle/neobundle.vim/
+" endif
+" 
+" call neobundle#rc(expand('~/.vim/bundle/'))
+" 
+" filetype plugin indent on     " Required!
+" 
+" 
+" NeoBundle 'git://github.com/Shougo/neocomplcache.git'
+" NeoBundle 'git://github.com/Shougo/unite.vim.git'
+" NeoBundle 'git://github.com/Shougo/vimfiler.git'
+" NeoBundle 'git://github.com/Shougo/vimshell.git'
+" NeoBundle 'git://github.com/Shougo/vimproc.git', {
+"   \ 'build' : {
+"     \ 'windows' : 'make -f make_mingw32.mak',
+"     \ 'cygwin' : 'make -f make_cygwin.mak',
+"     \ 'mac' : 'make -f make_mac.mak',
+"     \ 'unix' : 'make -f make_unix.mak',
+"   \ },
+" \ }
+" NeoBundle 'git://github.com/vim-scripts/taglist.vim.git'
+" NeoBundle 'git://github.com/vim-scripts/TwitVim.git'
+" NeoBundle 'git://github.com/fholgado/minibufexpl.vim.git'
+" NeoBundle 'git://github.com/fuenor/qfixhowm.git'
+" NeoBundle 'git://github.com/thinca/vim-qfreplace'
+" NeoBundle 'git://github.com/vim-scripts/zoom.vim'
+" NeoBundle 'git://github.com/thinca/vim-quickrun.git'
+" NeoBundle 'troydm/easybuffer.vim'
+" NeoBundle 'mbbill/undotree'
+" NeoBundle 'itchyny/lightline.vim'
+" NeoBundle 'airblade/vim-gitgutter'
+" NeoBundle 'http://github.com/mattn/emmet-vim.git'
+" NeoBundle 'git://github.com/tpope/vim-fugitive.git'
+" NeoBundle 'git://github.com/rbtnn/rabbit-ui.vim'
+" NeoBundle 'git://github.com/kannokanno/previm.git'
+" NeoBundle 'Markdown'
+" NeoBundle 'suan/vim-instant-markdown'
+if !1 | finish | endif
 
-call neobundle#rc(expand('~/.vim/bundle/'))
+ if has('vim_starting')
+   if &compatible
+     set nocompatible               " Be iMproved
+   endif
 
-filetype plugin indent on     " Required!
-
-
-NeoBundle 'git://github.com/Shougo/neocomplcache.git'
-NeoBundle 'git://github.com/Shougo/unite.vim.git'
-NeoBundle 'git://github.com/Shougo/vimfiler.git'
-NeoBundle 'git://github.com/Shougo/vimshell.git'
-NeoBundle 'git://github.com/Shougo/vimproc.git', {
+   " Required:
+   set runtimepath+=~/.vim/bundle/neobundle.vim/
+ endif
+call neobundle#begin(expand('~/.vim/bundle/'))
+NeoBundleFetch 'Shougo/neocomplcache.git'
+NeoBundleFetch 'Shougo/unite.vim.git'
+NeoBundleFetch 'Shougo/vimfiler.git'
+NeoBundleFetch 'Shougo/vimshell.git'
+NeoBundleFetch 'Shougo/vimproc.git', {
   \ 'build' : {
     \ 'windows' : 'make -f make_mingw32.mak',
     \ 'cygwin' : 'make -f make_cygwin.mak',
@@ -322,24 +362,27 @@ NeoBundle 'git://github.com/Shougo/vimproc.git', {
     \ 'unix' : 'make -f make_unix.mak',
   \ },
 \ }
-NeoBundle 'git://github.com/vim-scripts/taglist.vim.git'
-NeoBundle 'git://github.com/vim-scripts/TwitVim.git'
-NeoBundle 'git://github.com/fholgado/minibufexpl.vim.git'
-NeoBundle 'git://github.com/fuenor/qfixhowm.git'
-NeoBundle 'git://github.com/thinca/vim-qfreplace'
-NeoBundle 'git://github.com/vim-scripts/zoom.vim'
-NeoBundle 'git://github.com/thinca/vim-quickrun.git'
-NeoBundle 'troydm/easybuffer.vim'
-NeoBundle 'mbbill/undotree'
-NeoBundle 'itchyny/lightline.vim'
-NeoBundle 'airblade/vim-gitgutter'
-NeoBundle 'http://github.com/mattn/emmet-vim.git'
-NeoBundle 'git://github.com/tpope/vim-fugitive.git'
-NeoBundle 'git://github.com/rbtnn/rabbit-ui.vim'
-NeoBundle 'git://github.com/kannokanno/previm.git'
-NeoBundle 'Markdown'
-NeoBundle 'suan/vim-instant-markdown'
+NeoBundleFetch 'vim-scripts/taglist.vim.git'
+NeoBundleFetch 'vim-scripts/TwitVim.git'
+NeoBundleFetch 'fholgado/minibufexpl.vim.git'
+NeoBundleFetch 'fuenor/qfixhowm.git'
+NeoBundleFetch 'thinca/vim-qfreplace'
+NeoBundleFetch 'vim-scripts/zoom.vim'
+NeoBundleFetch 'thinca/vim-quickrun.git'
+NeoBundleFetch 'troydm/easybuffer.vim'
+NeoBundleFetch 'mbbill/undotree'
+NeoBundleFetch 'itchyny/lightline.vim'
+NeoBundleFetch 'airblade/vim-gitgutter'
+NeoBundleFetch 'mattn/emmet-vim.git'
+NeoBundleFetch 'tpope/vim-fugitive.git'
+NeoBundleFetch 'rbtnn/rabbit-ui.vim'
+NeoBundleFetch 'kannokanno/previm.git'
+NeoBundleFetch 'Markdown'
+NeoBundleFetch 'suan/vim-instant-markdown'
 
+call neobundle#end()
+filetype plugin indent on     " Required!
+NeoBundleCheck
 
 " Installation check.
 if neobundle#exists_not_installed_bundles()
@@ -349,9 +392,6 @@ if neobundle#exists_not_installed_bundles()
   "finish
 endif
 
-
-filetype plugin on
-filetype indent on
 
 autocmd BufEnter *.php set foldmethod=expr foldexpr=PHPFoldSetting(v:lnum)
 autocmd BufEnter *.md set foldmethod=expr foldexpr=MarkdownLevel()
