@@ -26,8 +26,8 @@ set softtabstop=0
 " インデントの各段階に使われる空白の数。
 set shiftwidth=4
 " タブをスペースに展開しない (expandtab:有効 noexpandtab:無効)
-set expandtab
-"set noexpandtab
+"set expandtab
+set noexpandtab
 " 自動的にインデントする (noautoindent:インデントしない)
 set autoindent
 "新しい行を作ったときに高度な自動インデントを行う
@@ -300,45 +300,7 @@ let g:Tlist_Use_Right_Window = 1
 " neobundle
 
 filetype plugin indent off
-" if has('vim_starting')
-"   set runtimepath+=~/.vim/bundle/neobundle.vim/
-" endif
-" 
-" call neobundle#rc(expand('~/.vim/bundle/'))
-" 
-" filetype plugin indent on     " Required!
-" 
-" 
-" NeoBundle 'git://github.com/Shougo/neocomplcache.git'
-" NeoBundle 'git://github.com/Shougo/unite.vim.git'
-" NeoBundle 'git://github.com/Shougo/vimfiler.git'
-" NeoBundle 'git://github.com/Shougo/vimshell.git'
-" NeoBundle 'git://github.com/Shougo/vimproc.git', {
-"   \ 'build' : {
-"     \ 'windows' : 'make -f make_mingw32.mak',
-"     \ 'cygwin' : 'make -f make_cygwin.mak',
-"     \ 'mac' : 'make -f make_mac.mak',
-"     \ 'unix' : 'make -f make_unix.mak',
-"   \ },
-" \ }
-" NeoBundle 'git://github.com/vim-scripts/taglist.vim.git'
-" NeoBundle 'git://github.com/vim-scripts/TwitVim.git'
-" NeoBundle 'git://github.com/fholgado/minibufexpl.vim.git'
-" NeoBundle 'git://github.com/fuenor/qfixhowm.git'
-" NeoBundle 'git://github.com/thinca/vim-qfreplace'
-" NeoBundle 'git://github.com/vim-scripts/zoom.vim'
-" NeoBundle 'git://github.com/thinca/vim-quickrun.git'
-" NeoBundle 'troydm/easybuffer.vim'
-" NeoBundle 'mbbill/undotree'
-" NeoBundle 'itchyny/lightline.vim'
-" NeoBundle 'airblade/vim-gitgutter'
-" NeoBundle 'http://github.com/mattn/emmet-vim.git'
-" NeoBundle 'git://github.com/tpope/vim-fugitive.git'
-" NeoBundle 'git://github.com/rbtnn/rabbit-ui.vim'
-" NeoBundle 'git://github.com/kannokanno/previm.git'
-" NeoBundle 'Markdown'
-" NeoBundle 'suan/vim-instant-markdown'
-"if !1 | finish | endif
+if !1 | finish | endif
 
 if has('vim_starting')
    if &compatible
