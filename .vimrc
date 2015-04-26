@@ -39,6 +39,11 @@ set wrapscan
 " VIMでPHP構文チェック
 set makeprg=php\ -l\ %
 set errorformat=%m\ in\ %f\ on\ line\ %l
+" マウススクロール
+set mouse=a
+" 文字可視化の設定
+set list
+set listchars=tab:\¦\ \,trail:-,eol:↲,extends:»,precedes:«,nbsp:%
 
 "---------------------------------------------------------------------------
 " GUI固有ではない画面表示の設定:
@@ -338,8 +343,15 @@ NeoBundle 'mattn/emmet-vim.git'
 NeoBundle 'tpope/vim-fugitive.git'
 NeoBundle 'rbtnn/rabbit-ui.vim'
 NeoBundle 'kannokanno/previm.git'
-NeoBundle 'Markdown'
-NeoBundle 'suan/vim-instant-markdown'
+" NeoBundle 'Markdown'
+" NeoBundle 'suan/vim-instant-markdown' ←このマークダウンプレビューは重い
+NeoBundle 'scrooloose/syntastic'
+NeoBundle 'rcmdnk/vim-markdown'
+NeoBundle 'kchmck/vim-coffee-script'
+NeoBundle 'git://github.com/kana/vim-fakeclip.git'
+NeoBundle 'derekwyatt/vim-scala'
+" NeoBundle 'nathanaelkane/vim-indent-guides'
+" NeoBundle 'Yggdroot/indentLine'
 
 call neobundle#end()
 filetype plugin indent on     " Required!
@@ -475,7 +487,8 @@ let g:gitgutter_sign_modified = '➜'
 let g:gitgutter_sign_removed = '✘'
 
 " lightline.vim
-let g:lightline = {'colorscheme': 'Powerline'}
+" let g:lightline = {'colorscheme': 'Powerline'}
+let g:lightline = {}
 
 " カッコ補完
 inoremap ( ()<ESC>i
@@ -500,3 +513,31 @@ function! s:edit_csv(path)
   call writefile(map(rabbit_ui#gridview(map(readfile(expand(a:path)),'split(v:val,",",1)')), "join(v:val, ',')"), expand(a:path))
 endfunction
 command! -nargs=1 EditCSV  :call <sid>edit_csv(<q-args>)
+
+" Previm
+let g:previm_open_cmd = 'open -a Google\ Chrome'
+augroup PrevimSettings
+    autocmd!
+    autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
+augroup END
+
+" vimにcoffeeファイルタイプを認識させる
+au BufRead,BufNewFile,BufReadPre *.coffee   set filetype=coffee
+" インデント設定
+" autocmd FileType coffee    setlocal sw=2 sts=2 ts=2 et
+" オートコンパイル
+"保存と同時にコンパイルする
+" autocmd BufWritePost *.coffee silent make! 
+  "エラーがあったら別ウィンドウで表示
+autocmd QuickFixCmdPost * nested cwindow | redraw! 
+" Ctrl-cで右ウィンドウにコンパイル結果を一時表示する
+nnoremap <silent> <C-C> :CoffeeCompile vert <CR><C-w>h
+
+" vim-indent-guides
+" タブが使えないようなので保留
+" let g:indent_guides_auto_colors=0
+" autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd   ctermbg=110
+" autocmd VimEnter,Colorscheme * :hi IndentGuidesEven  ctermbg=140
+" let g:indent_guides_enable_on_vim_startup=1
+" let g:indent_guides_guide_size=1
+" let g:indent_guides_start_level=2
