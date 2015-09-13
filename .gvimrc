@@ -35,7 +35,8 @@ set cmdheight=1
 " フォント
 " フォント
 " set guifont=MeiryoKe_Console:h10:cSHIFTJIS
-set guifont=Ricty:h14
+" set guifont=Ricty:h14
+set guifont=源ノ角ゴシック\ Code\ JP\ Light:h14
 
 "マルチディスプレイ用redraw
 nnoremap <C-D> :redraw! <CR>

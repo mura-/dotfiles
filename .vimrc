@@ -28,6 +28,12 @@ set shiftwidth=4
 " タブをスペースに展開しない (expandtab:有効 noexpandtab:無効)
 "set expandtab
 set noexpandtab
+
+" soft tab ts=2
+au BufNewFile,BufRead *.rb set expandtab tabstop=2 shiftwidth=2
+au BufNewFile,BufRead *.erb set expandtab tabstop=2 shiftwidth=2
+au BufNewFile,BufRead *.coffee set expandtab tabstop=2 shiftwidth=2
+
 " 自動的にインデントする (noautoindent:インデントしない)
 set autoindent
 "新しい行を作ったときに高度な自動インデントを行う
@@ -42,8 +48,9 @@ set errorformat=%m\ in\ %f\ on\ line\ %l
 " マウススクロール
 set mouse=a
 " 文字可視化の設定
-set list
-set listchars=tab:\¦\ \,trail:-,eol:↲,extends:»,precedes:«,nbsp:%
+" set list
+" set listchars=tab:\¦\ \,trail:-,eol:↲,extends:»,precedes:«,nbsp:%
+set listchars=eol:↲,extends:»,precedes:«,nbsp:%
 
 "---------------------------------------------------------------------------
 " GUI固有ではない画面表示の設定:
@@ -127,7 +134,37 @@ nmap <F8> :SrcExplToggle<CR>
 "inoremap ( ()<LEFT>
 "inoremap \" \""<LEFT>
 "inoremap ' ''<LEFT>
+"
 
+"---------------------------------------------------------------------------
+"コマンドラインモード用バインド
+cnoremap <C-a> <Home>
+" 一文字戻る
+cnoremap <C-b> <Left>
+" カーソルの下の文字を削除
+cnoremap <C-d> <Del>
+" 行末へ移動
+cnoremap <C-e> <End>
+" 一文字進む
+cnoremap <C-f> <Right>
+" コマンドライン履歴を一つ進む
+cnoremap <C-n> <Down>
+" コマンドライン履歴を一つ戻る
+cnoremap <C-p> <Up>
+" 前の単語へ移動
+cnoremap <M-b> <S-Left>
+" 次の単語へ移動
+cnoremap <M-f> <S-Right>
+
+" カーソル移動用バインド
+nnoremap k   gk
+nnoremap j   gj
+vnoremap k   gk
+vnoremap j   gj
+nnoremap gk  k
+nnoremap gj  j
+vnoremap gk  k
+vnoremap gj  j
 "---------------------------------------------------------------------------
 " tags
 set tags=tags
@@ -215,6 +252,9 @@ inoremap <silent> <C-j> <C-^>
 " Alt+o 現在位置を保持して下に行追加
 noremap <A-o> m`o<ESC>``
 
+" アスタリスクを押しても次のキーワードにとばない
+nmap * *N
+
 " ---------------------------------------------------------------------------
 "  test
 set whichwrap=b,s,h,l,<,>,[,],~
@@ -290,10 +330,10 @@ nnoremap <C-K> <C-W>k
 nnoremap <C-J> <C-W>j
 
 " ミニバッファに関連する設定
-let g:miniBufExplMapWindowNavVim = 1
-let g:miniBufExplMapWindowNavArrows = 1
-let g:miniBufExplMapCTabSwitchBufs = 1
-let g:miniBufExplModSelTarget = 1
+" let g:miniBufExplMapWindowNavVim = 1
+" let g:miniBufExplMapWindowNavArrows = 1
+" let g:miniBufExplMapCTabSwitchBufs = 1
+" let g:miniBufExplModSelTarget = 1
 
 "
 :set tags=tags
@@ -330,7 +370,7 @@ NeoBundle 'Shougo/vimproc.git', {
 \ }
 NeoBundle 'vim-scripts/taglist.vim.git'
 NeoBundle 'vim-scripts/TwitVim.git'
-NeoBundle 'fholgado/minibufexpl.vim.git'
+" NeoBundle 'fholgado/minibufexpl.vim.git'
 NeoBundle 'fuenor/qfixhowm.git'
 NeoBundle 'thinca/vim-qfreplace'
 NeoBundle 'vim-scripts/zoom.vim'
@@ -350,8 +390,25 @@ NeoBundle 'rcmdnk/vim-markdown'
 NeoBundle 'kchmck/vim-coffee-script'
 NeoBundle 'git://github.com/kana/vim-fakeclip.git'
 NeoBundle 'derekwyatt/vim-scala'
-" NeoBundle 'nathanaelkane/vim-indent-guides'
+NeoBundle 'nathanaelkane/vim-indent-guides'
 " NeoBundle 'Yggdroot/indentLine'
+NeoBundle 'Shougo/neomru.vim'
+NeoBundle 'kana/vim-tabpagecd'
+NeoBundle 'mtscout6/vim-cjsx'
+NeoBundle 'Shougo/tabpagebuffer.vim'
+NeoBundle 'mattn/vim-maketable'
+
+NeoBundleLazy 'http://conque.googlecode.com/svn/trunk/'
+\, {'autoload': {'commands': ['ConqueTerm', 'ConqueTermSplit', 'ConqueTermTab', 'ConqueTermVSplit']
+\,               'functions': ['conque_term#open', 'conque_term#subprocess', 'conque_term#register_function']}
+\,  'name': 'Conque'}
+
+NeoBundleLazy 'supermomonga/neocomplete-rsense.vim', { 'autoload' : {
+\ 'insert' : 1,
+\ 'filetypes': 'ruby',
+\ }}
+NeoBundle "kana/vim-smartinput"
+NeoBundle "cohama/vim-smartinput-endwise"
 
 call neobundle#end()
 filetype plugin indent on     " Required!
@@ -365,11 +422,21 @@ if neobundle#exists_not_installed_bundles()
   "finish
 endif
 
+call smartinput_endwise#define_default_rules()
+
 
 autocmd BufEnter *.php set foldmethod=expr foldexpr=PHPFoldSetting(v:lnum)
 autocmd BufEnter *.md set foldmethod=expr foldexpr=MarkdownLevel()
 autocmd BufEnter .bashrc set foldmethod=expr foldexpr=BASHFoldSetting(v:lnum)
 
+" .や::を入力したときにオムニ補完が有効になるようにする
+if !exists('g:neocomplete#force_omni_input_patterns')
+  let g:neocomplete#force_omni_input_patterns = {}
+endif
+let g:neocomplete#force_omni_input_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
+
+" 環境変数RSENSE_HOMEに'/usr/local/bin/rsense'を指定しても動く
+let g:neocomplete#sources#rsense#home_directory = '/usr/local/bin/rsense'
 
 " php folding
 function! PHPFoldSetting(lnum)
@@ -438,6 +505,8 @@ function! s:my_vimfiler_settings()
   nnoremap <buffer>s:call vimfiler#mappings#do_action('my_split')<Cr>
   nnoremap <buffer>v:call vimfiler#mappings#do_action('my_vsplit')<Cr>
 endfunction
+" tabでひらく
+" let g:vimfiler_edit_action = 'tabopen'
 
 
 let my_action = { 'is_selectable' : 1 }
@@ -475,6 +544,10 @@ let g:neocomplcache_dictionary_filetype_lists = {
 nnoremap <C-n> :bn<CR>
 nnoremap <C-p> :bp<CR>
 
+" ↑tabへ変更
+" nnoremap <C-n> :tabnext<CR>
+" nnoremap <C-p> :tabprevious<CR>
+ 
 " fileencoding
 set termencoding=utf-8
 set encoding=utf-8
@@ -487,7 +560,6 @@ let g:gitgutter_sign_modified = '➜'
 let g:gitgutter_sign_removed = '✘'
 
 " lightline.vim
-" let g:lightline = {'colorscheme': 'Powerline'}
 let g:lightline = {}
 
 " カッコ補完
@@ -515,7 +587,8 @@ endfunction
 command! -nargs=1 EditCSV  :call <sid>edit_csv(<q-args>)
 
 " Previm
-let g:previm_open_cmd = 'open -a Google\ Chrome'
+" let g:previm_open_cmd = 'open -a Google\ Chrome'
+let g:previm_open_cmd = 'open -a Safari'
 augroup PrevimSettings
     autocmd!
     autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
@@ -523,8 +596,6 @@ augroup END
 
 " vimにcoffeeファイルタイプを認識させる
 au BufRead,BufNewFile,BufReadPre *.coffee   set filetype=coffee
-" インデント設定
-" autocmd FileType coffee    setlocal sw=2 sts=2 ts=2 et
 " オートコンパイル
 "保存と同時にコンパイルする
 " autocmd BufWritePost *.coffee silent make! 
@@ -533,11 +604,47 @@ autocmd QuickFixCmdPost * nested cwindow | redraw!
 " Ctrl-cで右ウィンドウにコンパイル結果を一時表示する
 nnoremap <silent> <C-C> :CoffeeCompile vert <CR><C-w>h
 
-" vim-indent-guides
-" タブが使えないようなので保留
-" let g:indent_guides_auto_colors=0
-" autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd   ctermbg=110
-" autocmd VimEnter,Colorscheme * :hi IndentGuidesEven  ctermbg=140
-" let g:indent_guides_enable_on_vim_startup=1
-" let g:indent_guides_guide_size=1
-" let g:indent_guides_start_level=2
+let g:indent_guides_enable_on_vim_startup=1
+let g:indent_guides_guide_size=1
+let g:indent_guides_start_level=2
+
+"------------------------------------
+" unite.vim
+"------------------------------------
+" 入力モードで開始する
+let g:unite_enable_start_insert=0
+" バッファ一覧(現在のタブ)
+noremap <C-U><C-B> :Unite buffer_tab<CR>
+" タブページ一覧
+noremap <C-U><C-T> :Unite tab<CR>
+" バッファ一覧(全てのタブ)
+noremap <C-U><C-C> :Unite buffer<CR>
+" ファイル一覧
+noremap <C-U><C-F> :UniteWithBufferDir -buffer-name=files file<CR>
+" 最近使ったファイルの一覧
+noremap <C-U><C-R> :Unite file_mru<CR>
+" レジスタ一覧
+noremap <C-U><C-Y> :Unite -buffer-name=register register<CR>
+" ファイルとバッファ
+noremap <C-U><C-U> :Unite buffer file_mru<CR>
+" 全部
+noremap <C-U><C-A> :Unite UniteWithBufferDir -buffer-name=files buffer file_mru bookmark file<CR>
+" ESCキーを2回押すと終了する
+au FileType unite nnoremap <silent> <buffer> <ESC><ESC> :q<CR>
+au FileType unite inoremap <silent> <buffer> <ESC><ESC> <ESC>:q<CR>
+
+
+" Conque
+let g:ConqueTerm_ReadUnfocused = 1
+let g:ConqueTerm_CloseOnEnd = 1
+let g:ConqueTerm_StartMessages = 0
+let g:ConqueTerm_CWInsert = 1
+noremap <silent> <Leader>sh :ConqueTermVSplit zsh<CR>
+
+" Conque
+function! s:delete_ConqueTerm(buffer_name)
+    let term_obj = conque_term#get_instance(a:buffer_name)
+    call term_obj.close()
+endfunction
+autocmd BufWinLeave zsh\s-\s? call <SID>delete_ConqueTerm(expand('%'))
+
